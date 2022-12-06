@@ -5,8 +5,10 @@
 3) Запуск сервера: python manage.py runserver
 
 Расположение версточных файлов:
-  В приложении eco:
+
+В приложении eco:
   - html-страницы: eco\templates\eco
   - css: eco\static\eco\css
-  В приложении users:
+ 
+В приложении users:
   - html-страницы: users\templates\users
