@@ -1,0 +1,43 @@
+{% extends 'eco/_base.html' %}
+
+{% block content %} 
+<div class="map">
+	<div class='head-login'>
+		{% if user.is_authenticated %}
+			<a class="login" href="{% url 'profile' %}">профиль</a> | <a class="login" href="{% url 'logout' %}">выход</a>
+		  {% else %}
+		  <a class="login" href="{% url 'register' %}">регистрация</a> | <a class="login" href="{% url 'login' %}">вход</a>
+		{% endif %}  
+	</div>
+	<header class="header">
+        <nav class="menu">
+            <a href="{% url 'info' %}"><img src="/static/eco/images/logo.svg" alt=""></a>
+
+            {% for m in menu %}
+                <a class="menu-link" href="{% url m.url_name %}">{{ m.title }}</a>
+            {% endfor %}
+        </nav>    
+    </header>
+	
+	<div align="center">
+		<div class="page3">Выбери материал и найди, куда его можно сдать!</div>
+			
+		<iframe width="1200" height="680" src="https://recyclemap.ru/" name="iframe" scrolling="auto"> </iframe>
+	</div>
+
+	
+	<footer class="footer">
+		<div class="info">
+			<div class="media">
+				<img src="/static/eco/images/TelegramLogo.svg" alt="" width="45">
+				<a class="foot" href="https://t.me/SmartGreenCloudBot">Наш бот-помощник!</a>
+			</div>
+
+			<div class="media">
+				<p class="foot">GreenCloud, 2022</p>
+			</div>
+		</div>
+	</footer>
+</div>
+{% endblock %} 
+	

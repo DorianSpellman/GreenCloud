@@ -1,0 +1,55 @@
+{% load static %}
+<!-- {% load eco_tags %} -->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'eco/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+	
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;1,100&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;1,100&family=Roboto:wght@100&display=swap" rel="stylesheet"/>
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;1,100&family=Roboto:wght@300&display=swap" rel="stylesheet">
+	
+	<link rel="shortcut icon" href="{% static 'eco/images/main.ico' %}" type="image/x-icon"/>
+	<link rel="stylesheet" href="{% static 'eco/css/cards.css'  %}">
+	<link type="text/css" href="{% static 'eco/css/styles.css' %}" rel="stylesheet" />
+	<title>{{ title }}</title>
+</head>
+
+<body>
+
+<!-- Header -->
+	{% block header %}
+	{% endblock %}
+<!-- Конец header'a -->
+
+{% if messages %}
+        	{% for message in messages %}
+          	<div class="alert alert-{{ message.tags }}">
+            	{{ message }}
+          	</div>
+        	{% endfor %}
+{% endif %}
+
+<!-- Блок контента -->
+	{% block content %}
+	{% endblock %}
+<!-- Конец блока контента -->
+
+
+<!-- Footer -->
+	{% block footer %}
+	{% endblock %}
+<!-- Конец footer'а и страницы -->    
+</body>
+</html>

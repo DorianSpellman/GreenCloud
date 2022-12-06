@@ -1,0 +1,310 @@
+{% extends 'eco/_base.html' %}
+
+{% block content %} 
+
+<div class="page2">
+    <div class='head-login'>
+        {% if user.is_authenticated %}
+            <a class="login" href="{% url 'profile' %}">профиль</a> | <a class="login" href="{% url 'logout' %}">выход</a>
+          {% else %}
+          <a class="login" href="{% url 'register' %}">регистрация</a> | <a class="login" href="{% url 'login' %}">вход</a>
+        {% endif %}  
+    </div>
+    <header class="header">
+        <nav class="menu">
+            <a href="{% url 'info' %}"><img src="/static/eco/images/logo.svg" alt=""></a>
+
+            {% for m in menu %}
+                <a class="menu-link" href="{% url m.url_name %}">{{ m.title }}</a>
+            {% endfor %}
+        </nav>    
+    </header>
+
+    <div class="materials" align="center">
+
+        {% if selected == 0 %}
+            <a id="selected" href="{% url 'codes' %}">все</a>
+        {% else %} 
+            <a id="mats" href="{% url 'codes' %}">все </a>
+        {% endif %}
+        
+        {% for type in types %}
+            {% if type.slug == selected %}
+                <a id="selected" href="{{ type.get_absolute_url }}">{{ type.name }}</a>
+            {% else %}
+                <a id="mats" href="{{ type.get_absolute_url }}">{{ type.name }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="d1" align="center">
+        <div class="butt">
+            <div class="buttons">
+                <form class="search" action="{% url 'codes' %}">
+                    <input type="text" placeholder="Код или идентификатор..." aria-label="Search" name="search">
+                    <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </form>
+            </div>
+
+
+            <div class="buttons">
+                <!-- Button to Open the Modal -->
+                <button type="button" id="instruction" data-toggle="modal" data-target="#myModal">
+                    Что такое код и идентификатор?
+                </button>
+              
+                <!-- The Modal -->
+                <div class="modal fade" id="myModal">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                        
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Код и идентификатор (ISO) материала</h4>
+                                <button type="button" class="btn-close" data-dismiss="modal">х</button>
+                            </div>
+                            
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <img src="/static/eco/images/instruction.jpg" alt="" style="display: block; height: auto; max-width: 100%;">
+                            </div>
+                                           
+                        </div>
+                    </div>
+                </div>               
+            </div>
+        </div>
+    </div>
+
+    <div class="codes">
+        {% for mat in material %}
+
+            {% if mat == '' %}
+            <div>
+                <!-- Если пользователь авторизирован -->
+                {% if user.is_authenticated %}
+                <div class="register">
+                    <h2>К сожалению, такого матерала ещё нет, но если вы уверены в правильности написания, просьба сообщить нам об этом для пополнения базы. Вместе мы сделаем мир чище!</h2>
+                </div>
+                <!-- Форма обратной связи -->
+                <div class="feedback">
+                    <script src="https://yastatic.net/s3/frontend/forms/_/embed.js"></script>
+                    <iframe src="https://forms.yandex.ru/cloud/6381ff1c02848fb7736e38d4/?iframe=1" frameborder="0" name="ya-form-6381ff1c02848fb7736e38d4" width="600"></iframe>
+                </div>
+                <!-- Если не авторизирован -->
+                {% else %}
+                <div class="register">
+                    <h2>К сожалению, такого матерала ещё нет, но если вы уверены в правильности написания, просьба сообщить нам об этом для пополнения базы. 
+                        Вместе мы сделаем мир чище!
+                        <br><br> Пожалуйста, войдите в систему для связи с разработчиками</h2>
+                    </h2>
+                </div>
+                <div class="feedback-login">
+                    <a class="login" href="{% url 'register' %}">регистрация</a> | <a class="login" href="{% url 'login' %}">вход</a>
+                </div>
+                <!-- Форма обратной связи -->
+                {% endif %}
+            </div>
+            {% endif %}
+        
+        
+            {% if mat.type_id == 1 %}
+            <div class="cards">
+                <div class="plastic">                   
+                    {% if mat.code != None and mat.recycle == True %}
+                        <div class="zagolovok"><h1 id="rec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                    {% elif mat.code != None and mat.recycle == False %}
+                        <div class="zagolovok"><h1 id="norec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                    {% elif mat.code == None and mat.recycle == True %}
+                        <div class="zagolovok"><h1 id="rec">{{ mat.ident }}</h1></div>
+                    {% elif mat.code == None and mat.recycle == False %}
+                        <div class="zagolovok"><h1 id="norec">{{ mat.ident }}</h1></div>
+                    {% endif %}
+
+                    <div class="tip"><h5>{{ mat.name }}</h5></div>
+                    <h2><b>Использование:</b></h2>
+                    <div class="t1"><p>{{ mat.using|linebreaksbr }}</p></div>
+                    <h2><b>Переработка:</b></h2>
+                    <div class="t1"><p>{{ mat.content|linebreaksbr }}</p></div>
+                </div> 
+            </div>           
+            {% endif %}
+
+            {% if mat.type_id == 2 %}
+            <div class="cards">
+                <div class="paper">
+                    <div class="sleva">
+                        
+                        {% if mat.code != None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code != None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.ident }}</h1></div>
+                        {% endif %}
+
+                        <div class="tip"><h5>{{ mat.name }}</h5></div>
+                        <h2><b>Использование:</b></h2>
+                        <div class="t1"><p>{{ mat.using|linebreaksbr }}</p></div>
+                        <h2><b>Переработка:</b></h2>
+                        <div class="t1"><p>{{ mat.content|linebreaksbr }}</p></div>
+        
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if mat.type_id == 3 %}
+            <div class="cards">
+                <div class="metall">
+                    <div class="sleva">
+                        
+                        {% if mat.code != None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code != None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.ident }}</h1></div>
+                        {% endif %}
+
+                        <div class="tip"><h5>{{ mat.name }}</h5></div>
+                        <h2><b>Использование:</b></h2>
+                        <div class="t1"><p>{{ mat.using|linebreaksbr }}</p></div>
+                        <h2><b>Переработка:</b></h2>
+                        <div class="t1"><p>{{ mat.content|linebreaksbr }}</p></div>
+        
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if mat.type_id == 4 %}
+            <div class="cards">
+                <div class="organic">
+                    <div class="sleva">
+                        
+                        {% if mat.code != None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code != None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.ident }}</h1></div>
+                        {% endif %}
+
+                        <div class="tip"><h5>{{ mat.name }}</h5></div>
+                        <h2><b>Использование:</b></h2>
+                        <div class="t1"><p>{{ mat.using|linebreaksbr }}</p></div>
+                        <h2><b>Переработка:</b></h2>
+                        <div class="t1"><p>{{ mat.content|linebreaksbr }}</p></div>
+        
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if mat.type_id == 5 %}
+            <div class="cards">
+                <div class="glass">
+                    <div class="sleva">
+                        
+                        {% if mat.code != None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code != None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.ident }}</h1></div>
+                        {% endif %}
+
+                        <div class="tip"><h5>{{ mat.name }}</h5></div>
+                        <h2><b>Использование:</b></h2>
+                        <div class="t1"><p>{{ mat.using|linebreaksbr }}</p></div>
+                        <h2><b>Переработка:</b></h2>
+                        <div class="t1"><p>{{ mat.content|linebreaksbr }}</p></div>
+        
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if mat.type_id == 6 %}
+            <div class="cards">
+                <div class="composit">
+                    <div class="sleva">
+                        
+                        {% if mat.code != None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code != None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.ident }}</h1></div>
+                        {% endif %}
+
+                        <div class="tip"><h5>{{ mat.name }}</h5></div>
+                        <h2><b>Использование:</b></h2>
+                        <div class="t1"><p>{{ mat.using|linebreaksbr }}</p></div>
+                        <h2><b>Переработка:</b></h2>
+                        <div class="t1"><p>{{ mat.content|linebreaksbr }}</p></div>
+        
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if mat.type_id == 7 %}
+            <div class="cards">
+                <div class="electro">
+                    <div class="sleva">
+                        
+                        {% if mat.code != None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code != None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.code }} | {{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == True %}
+                            <div class="zagolovok"><h1 id="rec">{{ mat.ident }}</h1></div>
+                        {% elif mat.code == None and mat.recycle == False %}
+                            <div class="zagolovok"><h1 id="norec">{{ mat.ident }}</h1></div>
+                        {% endif %}
+
+                        <div class="tip"><h5>{{ mat.name }}</h5></div>
+                        <h2><b>Использование:</b></h2>
+                        <div class="t1"><p>{{ mat.using|linebreaksbr }}</p></div>
+                        <h2><b>Переработка:</b></h2>
+                        <div class="t1"><p>{{ mat.content|linebreaksbr }}</p></div>
+        
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            
+            
+
+        {% endfor %}
+
+        
+        
+    </div>
+    <footer class="footer">
+        <div class="info">
+            <div class="media">
+                <img src="/static/eco/images/TelegramLogo.svg" alt="" width="45">
+                <a class="foot" href="https://t.me/SmartGreenCloudBot">Наш бот-помощник!</a>
+            </div>
+
+            <div class="media">
+                <p class="foot">GreenCloud, 2022</p>
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}
