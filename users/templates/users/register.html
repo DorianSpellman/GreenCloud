@@ -1,0 +1,56 @@
+{% extends "eco/_base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block header %}
+
+<div class="user-page">
+    <div class='head-login'>
+        <a class="login" href="{% url 'register' %}">регистрация</a> | <a class="login" href="{% url 'login' %}">войти</a>
+    </div>
+    
+    <header class="header">
+        <nav class="menu">
+            <a href="{% url 'info' %}"><img src="/static/eco/images/logo.svg" alt=""></a>
+
+            {% for m in menu %}
+                <a class="menu-link" href="{% url m.url_name %}">{{ m.title }}</a>
+            {% endfor %}
+        </nav>    
+    </header>
+
+
+    <div class="register">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Добро пожаловать в Green Cloud</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Регистрация</button>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Уже есть аккаунт? <a class="ml-2" href="{% url 'login' %}">Вход</a>
+            </small>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="info">
+            <div class="media">
+                <img src="/static/eco/images/TelegramLogo.svg" alt="" width="45">
+                <a class="foot" href="https://t.me/SmartGreenCloudBot">Наш бот-помощник!</a>
+            </div>
+
+            <div class="media">
+                <p class="foot">GreenCloud, 2022</p>
+            </div>
+        </div>
+    </footer>
+</div>
+
+{% endblock %}
